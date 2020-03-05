@@ -198,7 +198,7 @@ public class QlearningSnake extends Spampede {
                 nextR++;
                 index = 3;
             }
-            double qUpdate = valList.get(index) + alpha * (reward + (getMax(nextR, nextC)[0]) - valList.get(index));
+            double qUpdate = valList.get(index) + alpha * (getReward(r, c) + (getMax(nextR, nextC)[0]) - valList.get(index));
             valList.set(index, qUpdate);
             qMatrix.put(currState, valList);
         }
@@ -328,6 +328,7 @@ public class QlearningSnake extends Spampede {
         super.dir = d;
         go();
         currRun++;
+            System.out.println(qMatrix);
         if(currRun==numRuns-1){
             pause();
         }
