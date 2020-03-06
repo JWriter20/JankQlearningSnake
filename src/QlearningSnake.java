@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class QlearningSnake extends Spampede {
         boolean hasNotFoundS = true;
 
         int i = 0;
-        while ((hasNotFoundN && getRowDistance(r - i, r) >6)) {
+        while ((hasNotFoundN)) {
             char curr = m.getContents(r - i, c);
             if (curr == '*' || curr == 'P') {
                 key += "N: " + BLOCK + getRowDistance(r - i, r) + " ";
@@ -239,7 +239,7 @@ public class QlearningSnake extends Spampede {
 
     public void cycle() {
         //@override
-        final int numRuns = 100000;
+        final int numRuns = 1000;
         int currRun = 0;
         Random random1 = new Random();
         while(currRun<numRuns){
@@ -296,7 +296,6 @@ public class QlearningSnake extends Spampede {
 
         randChoice = choices.get(random1.nextInt(3));
         int nextMaxDir = (int) getMax(r, c)[1];
-        //System.out.println(nextMaxDir);
         char nextDir = 'k';
         if (goRand || nextMaxDir == -1) {
             nextDir = randChoice;
@@ -326,11 +325,34 @@ public class QlearningSnake extends Spampede {
 
         themaze.dir = d;
         super.dir = d;
-        go();
         currRun++;
-            System.out.println(qMatrix);
+        go();
         if(currRun==numRuns-1){
-            pause();
+            String results = "{\"qmartixData\":[\n";
+            for ( String key : qMatrix.keySet() ) {
+                results += "{\"" + key + "\": " + "\"" + qMatrix.get(key) + "\"},\n";
+            }
+
+            //remove last comma for proper json formatting
+            results = results.substring(0, results.length()-2);
+            results += "\n]}";
+            String filename = "SavedLearning.json";
+
+            //write results to new file log.txt (need to delete before re-running test)
+            try {
+                BufferedWriter b = new BufferedWriter(
+                        new FileWriter ("/Users/jakewriter/Desktop/QLearning/JankQlearningSnake/src/SavedLearning.json"));
+                b.write(results);
+
+                //After writing close the resource
+                b.close();
+            }
+
+            catch (IOException e){
+                System.out.println("Issues writing to log file");
+
+            }
+            stop();
         }
        }
     }
