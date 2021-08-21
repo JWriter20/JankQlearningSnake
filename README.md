@@ -1,5 +1,8 @@
 # JankQlearningSnake
 
+A program that uses Q-learning in order to play the classic game "snake" and learn how to play the game.
+
+
 How to run: Open the QlearningSnake file, click anywhere with two fingers, and hit the run option
 
 Files: 
